@@ -1,0 +1,23 @@
+v 3
+d twinmatch: policy-twin selection by Mahalanobis distance
+d
+d twinmatch finds the comparison units that most resemble one
+d treated unit on a set of covariates -- its "policy twins."
+d It ranks every comparison unit by Mahalanobis distance to the
+d treated unit, reports the k nearest, optionally stores every
+d unit's distance in a new variable, and returns the twin ids
+d and distances in r() for use in later commands.  A z-score
+d (standardize) metric is available when covariate scales differ
+d wildly, and singular covariance matrices are handled by
+d dropping collinear columns with a warning.  Useful for small-N
+d program evaluation: picking comparison districts, counties,
+d campuses, or hospitals, or building a synthetic-control donor
+d pool.  Requires Stata 16.0 or newer.  No dependencies.
+d
+d Author: Eric A. Booth, Sr Researcher, Texas 2036
+d Support: eric.a.booth@gmail.com
+d
+d Distribution-Date: 20260706
+d
+f twinmatch.ado
+f twinmatch.sthlp
