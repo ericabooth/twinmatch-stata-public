@@ -28,7 +28,7 @@ pool, not as an estimator.
 
 ## Install
 
-From GitHub (once the repository is public):
+From GitHub:
 
 ```stata
 net install twinmatch, from("https://raw.githubusercontent.com/ericabooth/twinmatch-stata-public/main/") replace force
@@ -87,9 +87,20 @@ Extract individual twins with `local x : word # of `r(twins)'`.
 
 `test_twinmatch.do` is a self-contained battery (synthetic data plus
 `sysuse auto`) that exercises every documented option, verifies distances
-against hand computations, and checks the error codes. Set the `pkgroot`
-global at the top of the file, then run it in batch from any scratch
-directory.
+against hand computations, and checks the error codes. Run it in batch
+from any scratch directory and pass the package folder as the argument
+(`stata-mp -b do test_twinmatch.do "<package folder>"`); with no
+argument it uses the current folder, or the `twinmatch.ado` it finds on
+the adopath.
+
+## Changelog
+
+- 0.1.1 (2026-11-09): `generate()` no longer leaves an all-missing
+  variable behind when the distance step fails (for example, all
+  covariates constant), so a rerun does not stop with "already defined".
+  The test battery finds the package folder itself and puts it first on
+  the adopath.
+- 0.1.0 (2026-07-06): first release.
 
 ## License
 

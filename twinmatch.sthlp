@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.1.0  2026-07-06}{...}
+{* *! version 0.1.1  2026-11-09}{...}
 {viewerjumpto "Syntax" "twinmatch##syntax"}{...}
 {viewerjumpto "Description" "twinmatch##description"}{...}
 {viewerjumpto "Options" "twinmatch##options"}{...}
@@ -77,7 +77,8 @@ comparison units in the sample.{p_end}
 {phang}{cmd:generate(}{it:newvar}{cmd:)} creates a {cmd:double} variable
 holding each in-sample unit's distance to the treated unit (0 for the
 treated unit itself).  This is useful for plotting the full distance
-distribution or for choosing a caliper.{p_end}
+distribution or for choosing a caliper.  The variable is created only
+when the command succeeds; an error leaves no partial variable.{p_end}
 
 {phang}{cmd:standardize} replaces the full Mahalanobis metric with Euclidean
 distance on z-scored covariates (equivalently, Mahalanobis with a diagonal

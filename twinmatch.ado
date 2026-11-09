@@ -1,5 +1,8 @@
-*! version 0.1.0  2026-07-06  Eric A. Booth, Sr Researcher, Texas 2036
+*! version 0.1.1  2026-11-09  Eric A. Booth, Sr Researcher, Texas 2036
 *! twinmatch: policy-twin selection by Mahalanobis distance
+* 0.1.1  2026-11-09  generate() fills a temporary variable and renames it
+*                   only after the distances are computed, so an error
+*                   leaves no half-made variable behind
 * version 16.0 suffices: uses only long-standing Mata and syntax features.
 
 program define twinmatch, rclass
@@ -56,17 +59,21 @@ program define twinmatch, rclass
     }
 
     * ---- optional distance variable ------------------------------------------
+    tempvar gendist
+    local genwork ""
     if "`generate'" != "" {
         confirm new variable `generate'
-        quietly gen double `generate' = .
+        quietly gen double `gendist' = .
+        local genwork "`gendist'"
     }
 
     * ---- compute -------------------------------------------------------------
     local usestd = ("`standardize'" != "")
     mata: tm_findtwins("`varlist'", "`id_str'", `"`treatval'"', ///
-        `ntwins', "`touse'", "`generate'", `usestd')
+        `ntwins', "`touse'", "`genwork'", `usestd')
 
     if "`generate'" != "" {
+        rename `gendist' `generate'
         if `usestd' {
             label variable `generate' "Euclidean distance (z-scored covariates) to `treatval'"
         }

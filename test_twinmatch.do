@@ -1,17 +1,30 @@
 * ==============================================================================
 * test_twinmatch.do -- test battery for the twinmatch package
-* Run from any scratch directory:  stata-mp -b do test_twinmatch.do
+* Run from any scratch directory:
+*   stata-mp -b do test_twinmatch.do "<package folder>"
 * Judge by the log: no run-time error codes and no failed assertions.
 * ==============================================================================
 
 * --- paths: set once here; nothing below is hard-coded -----------------------
-global pkgroot "/Users/ebooth/Documents/GitHub/Book Manuscript:Applied Evaluation-Stata/twinmatch-stata-public"
+* pkgroot: argument 1 if given, else an existing $pkgroot, else the
+* current folder when it holds twinmatch.ado (a repo clone), else the folder
+* of the twinmatch.ado that findfile locates on the adopath.
+if `"`1'"' != "" global pkgroot `"`1'"'
+if `"$pkgroot"' == "" {
+    capture confirm file `"`c(pwd)'/twinmatch.ado"'
+    if !_rc global pkgroot `"`c(pwd)'"'
+    else {
+        findfile twinmatch.ado
+        local _fn `"`r(fn)'"'
+        global pkgroot = substr(`"`_fn'"', 1, strlen(`"`_fn'"') - strlen("/twinmatch.ado"))
+    }
+}
 
 version 16.0
 clear all
 set more off
 set seed 20260706
-adopath + "$pkgroot"
+adopath ++ "$pkgroot"
 which twinmatch
 
 * ==============================================================================
@@ -200,6 +213,20 @@ gen byte c1 = 1
 gen byte c2 = 2
 capture noisily twinmatch c1 c2, id(make) treated("Volvo 260")
 assert _rc == 506
+
+* 5h. (0.1.1) a failed run with generate() leaves no variable behind
+capture noisily twinmatch c1 c2, id(make) treated("Volvo 260") generate(dd)
+assert _rc != 0
+capture confirm variable dd
+assert _rc != 0
+capture noisily twinmatch c1 c2, id(make) treated("Volvo 260") standardize generate(dd)
+assert _rc != 0
+capture confirm variable dd
+assert _rc != 0
+* and a successful run still creates it
+twinmatch mpg price weight, id(make) treated("Volvo 260") generate(dd)
+confirm double variable dd
+assert dd == 0 if make == "Volvo 260"
 
 * ==============================================================================
 display as text "{hline 70}"
