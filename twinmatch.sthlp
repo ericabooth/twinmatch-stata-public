@@ -296,7 +296,7 @@ synthetic-control or difference-in-differences command.
 {phang2}{cmd:. matrix list r(stability)}{p_end}
 
 {pstd}{bf:Write the shortlist to the project ledger}{p_end}
-{phang2}{cmd:. twinmatch mpg price weight, id(make) treated("Volvo 260") saving(ledger/twins_volvo.csv, replace)}{p_end}
+{phang2}{cmd:. twinmatch mpg price weight, id(make) treated("Volvo 260") saving(twins_volvo.csv, replace)}{p_end}
 
 {pstd}{bf:A panel: firms whose investment moved with firm 1 over 1935-1944, given size}{p_end}
 {phang2}{cmd:. webuse grunfeld, clear}{p_end}
